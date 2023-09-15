@@ -153,7 +153,6 @@ export default function Anasayfa() {
     console.log('Başlangıç Tarihi:', baslangic);
     console.log('Bitiş Tarihi:', bitis);
     
-    // Başlangıç ve bitiş tarihleri arasındaki günleri işaretle
     const tarihler = getDatesBetween(baslangic, bitis);
     const yeniMarkedDates = { ...markedDates };
   
@@ -360,7 +359,7 @@ const styles = StyleSheet.create({
     color:'#7A7A7A'
   },
   labelButton: {
-    width: 85, // Adjust the width as needed
+    width: 85,  
     height: 85,
     backgroundColor: '#381163',
     marginTop: 7,

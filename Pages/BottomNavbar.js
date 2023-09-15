@@ -54,8 +54,7 @@ const TabButton = (props) => {
         ref={viewRef}
         duration={1000}
         style={styles.container}>
-        <View style={[styles.btn, { backgroundColor: focused ? Colors.purple : 'transparent',borderColor: focused ? Colors.white : Colors.purple, // borderColor ayarlandı
- } ]}>
+        <View style={[styles.btn, { backgroundColor: focused ? Colors.purple : 'transparent',borderColor: focused ? Colors.white : Colors.purple} ]}>
           <Animatable.View
             ref={circleRef}
             style={styles.circle} />

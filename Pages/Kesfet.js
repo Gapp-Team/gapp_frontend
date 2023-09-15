@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     color: '#7A7A7A',
   },
   labelButton: {
-    width: 85, // Adjust the width as needed
+    width: 85,
     height: 85,
     backgroundColor: '#381163',
     marginTop: 7,
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 4,
-    width: 300, // Kart genişliği, ihtiyaca göre ayarlayın
+    width: 300,
   },
   title: {
     fontSize: 20,

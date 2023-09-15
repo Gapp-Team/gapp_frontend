@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
-import { Video } from 'expo-av'; // Expo Video bileşenini içe aktarın
 import Logo from '../components/Logo';
 import { ScrollView } from 'react-native-gesture-handler';
 import * as Font from 'expo-font';
@@ -70,8 +69,8 @@ export default function HesapBilgileri() {
                 style={styles.input}
                 placeholder="Adınızı girin"
                 underlineColorAndroid="transparent"
-                value={inputData.ad} // State'ten veriyi çekin
-                onChangeText={text => setInputData({ ...inputData, ad: text })} // State'i güncelleyin
+                value={inputData.ad} 
+                onChangeText={text => setInputData({ ...inputData, ad: text })} // State'i güncelle
             />
         </View>
         <View style={styles.icerikcontainer}>
@@ -90,7 +89,7 @@ export default function HesapBilgileri() {
                 style={styles.input}
                 placeholder="Kullanıcı adınızı girin"
                 underlineColorAndroid="transparent"
-                value={kullaniciAdi} // input değeri state'ten gelir
+                value={kullaniciAdi} 
                 onChangeText={text => setKullaniciAdi(text)}
             />
         </View>
@@ -100,7 +99,7 @@ export default function HesapBilgileri() {
                 style={styles.input}
                 placeholder="Doğum Tarihinizi girin"
                 underlineColorAndroid="transparent"
-                value={dogumTarihi} // input değeri state'ten gelir
+                value={dogumTarihi}
                 onChangeText={text => setDogumTarihi(text)}
             />
         </View>
@@ -110,7 +109,7 @@ export default function HesapBilgileri() {
                 style={styles.input}
                 placeholder="Email Adresinizi girin"
                 underlineColorAndroid="transparent"
-                value={email} // input değeri state'ten gelir
+                value={email} 
                 onChangeText={text => setEmail(text)}
             />
         </View>

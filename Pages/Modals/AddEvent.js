@@ -18,7 +18,7 @@ const CustomModal = ({ visible, onClose, addEtkinlik }) => {
         fetchFonts();
       }, []);
     
-    const [selectedOption, setSelectedOption] = useState(''); // Seçilen seçeneği saklamak için bir state kullanıyoruz
+    const [selectedOption, setSelectedOption] = useState('');
 
     const optionsTekrar = [
         { label: 'Her Hafta', value: 'Her Hafta' },
@@ -72,8 +72,8 @@ const CustomModal = ({ visible, onClose, addEtkinlik }) => {
             hatirlatici: hatirlatici,
             selectedColor: selectedColor,
             aciklama: aciklama,
-            baslangicTarih: baslangicTarih, // Baslangic tarihini state'den alın
-            bitisTarih: bitisTarih, // Bitis tarihini state'den alın
+            baslangicTarih: baslangicTarih,  
+            bitisTarih: bitisTarih
         };
         console.log('Yeni Etkinlik:', yeniEtkinlik);
         addEtkinlik(yeniEtkinlik);
@@ -104,7 +104,7 @@ const CustomModal = ({ visible, onClose, addEtkinlik }) => {
                         <Text style={styles.itemtext}>Başlık</Text>
                         <TextInput
                         style={styles.input}
-                        onChangeText={(text) => setBaslik(text)} // Update the state with the new text
+                        onChangeText={(text) => setBaslik(text)}
                         value={baslik}
                         />
                     </View>
@@ -130,7 +130,7 @@ const CustomModal = ({ visible, onClose, addEtkinlik }) => {
                         <Text style={styles.itemtext}>Başlangıç</Text>
                         <View style={{marginLeft:'auto', flexDirection:'row'}}> 
                             <DateTimePicker
-                                    value={baslangicTarih || new Date()} // Varsayılan değer olarak yeni bir tarih kullanabilirsiniz
+                                    value={baslangicTarih || new Date()}
                                     mode="datetime"
                                     onChange={(event, selectedDate) => handleBaslangicTarihSec(selectedDate)}
                                     style={{ width: 170 }}
@@ -141,7 +141,7 @@ const CustomModal = ({ visible, onClose, addEtkinlik }) => {
                         <Text style={styles.itemtext}>Bitiş</Text>
                         <View style={{marginLeft:'auto', flexDirection:'row'}}> 
                             <DateTimePicker
-                                    value={bitisTarih || new Date()} // Varsayılan değer olarak yeni bir tarih kullanabilirsiniz
+                                    value={bitisTarih || new Date()} 
                                     mode="datetime"
                                     onChange={(event, selectedDate) => handleBitisTarihSec(selectedDate)}
                                     style={{ width: 170 }}
@@ -181,8 +181,8 @@ const CustomModal = ({ visible, onClose, addEtkinlik }) => {
                                     styles.color,
                                     {
                                         backgroundColor: color,
-                                        borderColor: selectedColor === color ? 'black' : 'transparent', // Seçilen rengin çerçeve rengini ayarlayın
-                                        borderWidth: selectedColor === color ? 2 : 0, // Seçilen rengin çerçeve kalınlığını ayarlayın
+                                        borderColor: selectedColor === color ? 'black' : 'transparent', 
+                                        borderWidth: selectedColor === color ? 2 : 0, 
                                     },
                                 ]}
                                 onPress={() => setSelectedColor(color)}

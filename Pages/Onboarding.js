@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#381163', // Arka plan rengi
+    backgroundColor: '#381163',
   },
   textBaslik: {
     fontSize: 58,

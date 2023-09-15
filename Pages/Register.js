@@ -166,8 +166,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft:60,
     marginRight: 60,
-    marginBottom: 25, // Set the background to transparent
-    borderWidth: 0, // Remove the border
+    marginBottom: 25, 
+    borderWidth: 0,
   },
   checkboxBackground:{
     backgroundColor: 'transparent',

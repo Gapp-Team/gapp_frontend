@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
-import { Video } from 'expo-av'; // Expo Video bileşenini içe aktarın
+import { Video } from 'expo-av';  
 import Logo from '../components/Logo';
 import { ScrollView } from 'react-native-gesture-handler';
 import * as Font from 'expo-font';
@@ -37,10 +37,11 @@ export default function Sorunbildir() {
     console.log('Metin Alanı:', inputData.metinAlani);
     navigation.goBack();
   };
+  
   const navigation = useNavigation();
 
   const goBackToAyarlar = () => {
-    navigation.goBack(); // Ayarlar sayfasına geri dön
+    navigation.goBack();
   };
   
   const handleImagePick = async () => {
@@ -54,9 +55,7 @@ export default function Sorunbildir() {
     const result = await ImagePicker.launchImageLibraryAsync();
   
     if (!result.cancelled) {
-      // Seçilen fotoğrafı kullanmak için burada işlem yapabilirsiniz.
       console.log(result.uri);
-      // Seçilen fotoğrafın uri'sini state veya bir başka değişken üzerinde saklayabilirsiniz.
     }
   };
 
@@ -83,7 +82,7 @@ export default function Sorunbildir() {
                         style={styles.input}
                         placeholder="Email Adresinizi girin"
                         underlineColorAndroid="transparent"
-                        value={email} // input değeri state'ten gelir
+                        value={email} 
                         onChangeText={text => setEmail(text)}
                     />
                 </View>
@@ -93,7 +92,7 @@ export default function Sorunbildir() {
                         style={styles.input}
                         placeholder="Konu girin"
                         underlineColorAndroid="transparent"
-                        value={konu} // input değeri state'ten gelir
+                        value={konu} 
                         onChangeText={text => setKonu(text)}
                     />
                 </View>
@@ -102,7 +101,7 @@ export default function Sorunbildir() {
                         style={[styles.input]}
                         placeholder="Açıklama girin"
                         multiline={true}
-                        numberOfLines={4} // İstediğiniz satır sayısını belirleyebilirsiniz
+                        numberOfLines={4}  İstediğiniz satır sayısını belirleyebilirsiniz
                         underlineColorAndroid="transparent"
                         value={metinAlani}
                         onChangeText={text => setMetinAlani(text)}

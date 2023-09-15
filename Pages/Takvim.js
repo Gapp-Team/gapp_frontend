@@ -97,7 +97,7 @@ export default function Takvim() {
     while (currentDate <= new Date(bitisGunAy)) {
       const formattedDate = currentDate.toISOString().split('T')[0];
       markedDatesCopy[formattedDate] = { underlayColor: 'red', textDecorationLine: 'underline' };
-      currentDate.setDate(currentDate.getDate() + 1); // Bir sonraki güne geçin
+      currentDate.setDate(currentDate.getDate() + 1);
     }
     console.log(markedDates);
     setMarkedDates(markedDatesCopy);
@@ -132,10 +132,11 @@ export default function Takvim() {
     { label: 'ARALIK', value: '12' },
   ];
   const yearOptions = [
-    { label: '2022', value: '2022' },
     { label: '2023', value: '2023' },
     { label: '2024', value: '2024' },
-    // Diğer yılları da ekleyin
+    { label: '2025', value: '2025' },
+    { label: '2026', value: '2026' },
+    { label: '2027', value: '2027' },
   ];
 
   return (

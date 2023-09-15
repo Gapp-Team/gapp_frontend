@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
-import { Video } from 'expo-av'; // Expo Video bileşenini içe aktarın
-import Logo from '../components/Logo';
 import { ScrollView } from 'react-native-gesture-handler';
 import * as Font from 'expo-font';
 import Icon, { Icons } from '../components/Icon';
 import { useNavigation } from '@react-navigation/native';
-import * as ImagePicker from 'expo-image-picker';
 
 const fetchFonts = async () => {
   await Font.loadAsync({

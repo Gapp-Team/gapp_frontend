@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, Modal, TouchableOpacity } from 'react-native';
-import { Video } from 'expo-av'; // Expo Video bileşenini içe aktarın
+import { Video } from 'expo-av';  
 import Logo from '../../components/Logo';
 import { ScrollView } from 'react-native-gesture-handler';
 import * as Font from 'expo-font';
-import { Asset } from 'expo-asset'; // Expo Asset'i içe aktarın
-import Slider from '@react-native-community/slider';
+import { Asset } from 'expo-asset';
 import Icon, { Icons } from '../../components/Icon';
 
 const fetchFonts = async () => {
@@ -45,7 +44,7 @@ export default function Planla() {
         <View style={{ alignItems:'center', marginTop:40}}>
           <Video
             ref={video}
-            style={{ width: 350, height: 200, borderRadius:20 }} // Video bileşeninin boyutunu ayarlayın
+            style={{ width: 350, height: 200, borderRadius:20 }}
             source={{ uri: videoAsset.uri }}
             useNativeControls
             resizeMode="contain"
@@ -69,7 +68,7 @@ export default function Planla() {
                 />
               </TouchableOpacity>
               <Image
-                  source={require('../../assets/gönder.png')} // Resminizin yolunu doğru şekilde belirtin
+                  source={require('../../assets/gönder.png')} 
                   style={styles.imagemodal}
               />
             </View>
@@ -87,7 +86,7 @@ export default function Planla() {
         <View style={{ alignItems:'center', marginTop:40}}>
           <Video
             ref={video}
-            style={{ width: 350, height: 200, borderRadius:20 }} // Video bileşeninin boyutunu ayarlayın
+            style={{ width: 350, height: 200, borderRadius:20 }} 
             source={{ uri: videoAsset.uri }}
             useNativeControls
             resizeMode="contain"
@@ -111,7 +110,7 @@ export default function Planla() {
                 />
               </TouchableOpacity>
               <Image
-                  source={require('../../assets/gönder.png')} // Resminizin yolunu doğru şekilde belirtin
+                  source={require('../../assets/gönder.png')} 
                   style={styles.imagemodal}
               />
             </View>
@@ -129,7 +128,7 @@ export default function Planla() {
         <View style={{ alignItems:'center', marginTop:40}}>
           <Video
             ref={video}
-            style={{ width: 350, height: 200, borderRadius:20 }} // Video bileşeninin boyutunu ayarlayın
+            style={{ width: 350, height: 200, borderRadius:20 }} 
             source={{ uri: videoAsset.uri }}
             useNativeControls
             resizeMode="contain"
@@ -153,7 +152,7 @@ export default function Planla() {
                 />
               </TouchableOpacity>
               <Image
-                  source={require('../../assets/gönder.png')} // Resminizin yolunu doğru şekilde belirtin
+                  source={require('../../assets/gönder.png')}
                   style={styles.imagemodal}
               />
             </View>
@@ -290,8 +289,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   video: {
-    width: '100%', // Video genişliğini cihazın genişliğine uyacak şekilde ayarlayın
-    aspectRatio: 16 / 9, // 16:9 en boy oranı
+    width: '100%', 
+    aspectRatio: 16 / 9,
   },
   videotext:{
     fontSize:28,

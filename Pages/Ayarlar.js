@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, Switch, Modal, FlatList } from 'react-native'; // Ekstra olarak Switch eklenmiş
+import { View, Text, StyleSheet, Image, Switch, Modal, FlatList } from 'react-native'; 
 import Logo from '../components/Logo';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import * as Font from 'expo-font';
 import Icon, { Icons } from '../components/Icon';
-import { useNavigation } from '@react-navigation/native'; // React Navigation'ı eklediğinizden emin olun
+import { useNavigation } from '@react-navigation/native'; 
 
 
 const fetchFonts = async () => {
@@ -16,7 +16,7 @@ const fetchFonts = async () => {
 export default function Ayarlar() {
   const [bildirimAcik, setBildirimAcik] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState('');
-  const [isLanguageModalVisible, setIsLanguageModalVisible] = useState(false); // Dil seçenekleri modalı görünürlüğünü yönetmek için kullanılır
+  const [isLanguageModalVisible, setIsLanguageModalVisible] = useState(false); 
 
   const diller = [
     { id: 1, name: 'Türkçe' },
@@ -28,7 +28,7 @@ export default function Ayarlar() {
 
   const handleLanguageChange = (language) => {
     setSelectedLanguage(language);
-    setIsLanguageModalVisible(false); // Dil seçimi yapıldığında modalı kapat
+    setIsLanguageModalVisible(false);
   };
 
   const toggleLanguageModal = () => {
