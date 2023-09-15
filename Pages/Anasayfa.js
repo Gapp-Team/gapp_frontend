@@ -291,8 +291,7 @@ export default function Anasayfa() {
         </View>
       </View>
     </ScrollView>
-  );
-}
+)}
 
 const styles = StyleSheet.create({
   container: {
@@ -427,6 +426,8 @@ const styles = StyleSheet.create({
     width:30,
     height:30,
     marginBottom:10,
-    marginTop:13
+    marginTop:13,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

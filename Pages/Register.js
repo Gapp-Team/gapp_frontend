@@ -10,9 +10,9 @@ import {
   Linking,
   Alert
 } from 'react-native';
+import axios from 'axios';
 import Logo from '../components/Logo';
 import { CheckBox } from 'react-native-elements';
-import axios from 'axios';
 
 export default function Register({navigation}){
   const [isChecked, setIsChecked] = useState(false);
@@ -55,7 +55,6 @@ export default function Register({navigation}){
       }
 }
 
-
   return (
     <View style = {styles.container}>
       <Logo />
@@ -67,7 +66,7 @@ export default function Register({navigation}){
           style={styles.input}
           placeholder="Kullanıcı Adı"
           onChange= {(e) => setName(e.target.value)}
-          placeholderTextColor="#381163" 
+          placeholderTextColor="#381163"
         />
       </View>
       <View style={styles.inputContainer}>
@@ -84,14 +83,16 @@ export default function Register({navigation}){
         <TextInput
           style={styles.input}
           placeholder="Şifre"
+          secureTextEntry={true}
           onChange= {(e) => setPassword(e.target.value)}
-           placeholderTextColor="#381163" 
+          placeholderTextColor="#381163" 
         />
       </View>
       <View style={styles.inputContainer}>
         <Image source={require('../assets/password.png')} style={styles.image} />
         <TextInput
           style={styles.input}
+          secureTextEntry={true}
           placeholder="Şifre (Tekrar)"
            placeholderTextColor="#381163" 
         />
@@ -168,6 +169,8 @@ const styles = StyleSheet.create({
     marginRight: 60,
     marginBottom: 25, 
     borderWidth: 0,
+    marginBottom: 25, 
+    borderWidth: 0, 
   },
   checkboxBackground:{
     backgroundColor: 'transparent',

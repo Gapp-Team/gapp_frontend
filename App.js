@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -28,7 +29,6 @@ import Bakım from './Pages/KesfetIcerik/Bakim';
 import Destek from './Pages/KesfetIcerik/Destek';
 import Hakkında from './Pages/KesfetIcerik/Hakkinda';
 
-
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -53,6 +53,7 @@ const OnboardingNavigator = () => {
             {...props}
             baslik="KATIL"
             aciklama="Sürekli güncellenen konferans, söyleşi gibi etkinliklerden haberdar ol ve sen de bizimle yerini al!"
+
               text="Onboarding Page 2" 
             image = {ikincion}
           />
@@ -71,6 +72,8 @@ const OnboardingNavigator = () => {
       </Stack.Screen>
 
       <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+      <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
+
       <Stack.Screen name="Navbar" component={Navbar} options={{ headerShown: false }} />
       <Stack.Screen name="Ayarlar" component={AyarlarComponent} options={{ headerShown: false }} />
       <Stack.Screen name="HesapBilgileri" component={HesapBilgileri} options={{ headerShown: false }} />
@@ -89,8 +92,6 @@ const OnboardingNavigator = () => {
       <Stack.Screen name="Bakım" component={Bakım} options={{ headerShown: false }} />
       <Stack.Screen name="Destek" component={Destek} options={{ headerShown: false }} />
       <Stack.Screen name="Hakkında" component={Hakkında} options={{ headerShown: false }} />
-      <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
-
     </Stack.Navigator>
   );
 };

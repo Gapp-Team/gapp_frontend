@@ -10,6 +10,7 @@ import {
   Alert,Linking
 } from 'react-native';
 import Logo from '../components/Logo';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login({navigation}){
@@ -25,7 +26,7 @@ export default function Login({navigation}){
         Alert.alert('Hatalı Giriş', 'Kullanıcı adı veya şifre hatalı.');
       }
     };
-    
+
   return (
     <View style = {styles.container}>
       <Logo />
