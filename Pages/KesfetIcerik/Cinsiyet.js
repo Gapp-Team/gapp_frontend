@@ -16,7 +16,7 @@ const fetchFonts = async () => {
   });
 };
 
-export default function Planla() {
+export default function Destek() {
   useEffect(() => {
     fetchFonts();
   }, []);

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import Logo from '../components/Logo';
-import { ScrollView } from 'react-native-gesture-handler';
 import * as Font from 'expo-font';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const fetchFonts = async () => {
   await Font.loadAsync({
@@ -13,33 +13,48 @@ const fetchFonts = async () => {
 };
 
 export default function Favoriler() {
+  const [favoritedItems, setFavoritedItems] = useState([]);
+
   useEffect(() => {
     fetchFonts();
-  }, []);
+    fetchFavorites();
+  }, [favoritedItems]);
 
-  const [isFavorite, setIsFavorite] = useState(false);
-
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
+  const fetchFavorites = async () => {
+    try {
+      const favoritesString = await AsyncStorage.getItem('favorites');
+      if (favoritesString) {
+        const favoritesArray = JSON.parse(favoritesString);
+        setFavoritedItems(favoritesArray);
+      }
+    } catch (error) {
+      console.error('Error fetching favorites:', error);
+    }
   };
 
-  const favoriteCards = [
-    {
-      id: 1,
-      title: 'GEBELİK SONLANDIRMA İŞLEMİNİN KADINLAR ÜZERİNDE ETKİSİ',
-      description: 'Gebelik kürtajı, vakum aspiratör yöntemiyle uygulanır. Bu yöntem, kürtaj için en sık uygulanan yöntemdir ve oldukça güvenlidir. Bu yöntemde plastik enjektör ve plastik ince ',
-    },
-    {
-      id: 2,
-      title: 'GEBELİK SONLANDIRMA İŞLEMİNİN KADINLAR ÜZERİNDE ETKİSİ',
-      description: 'Gebelik kürtajı, vakum aspiratör yöntemiyle uygulanır. Bu yöntem, kürtaj için en sık uygulanan yöntemdir ve oldukça güvenlidir. Bu yöntemde plastik enjektör ve plastik ince ',
-    },
-    {
-      id: 3,
-      title: 'GEBELİK SONLANDIRMA İŞLEMİNİN KADINLAR ÜZERİNDE ETKİSİ',
-      description: 'Gebelik kürtajı, vakum aspiratör yöntemiyle uygulanır. Bu yöntem, kürtaj için en sık uygulanan yöntemdir ve oldukça güvenlidir. Bu yöntemde plastik enjektör ve plastik ince ',
-    },
-  ];
+  const toggleFavorite = async (_id) => {
+    try {
+      const favoritesString = await AsyncStorage.getItem('favorites');
+      if (!favoritesString) {
+        return; 
+      }
+  
+      const favoritesArray = JSON.parse(favoritesString);
+  
+      const indexToRemove = favoritesArray.findIndex((item) => item._id === _id);
+  
+      if (indexToRemove !== -1) {
+        favoritesArray.splice(indexToRemove, 1);
+  
+        await AsyncStorage.setItem('favorites', JSON.stringify(favoritesArray));
+  
+        setFavoritedItems([...favoritesArray]);
+      }  
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+    }
+  };
+  
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -51,18 +66,20 @@ export default function Favoriler() {
         </View>
       </View>
       <View style={styles.cardContainer}>
-        {favoriteCards.map((card) => (
-          <TouchableOpacity key={card.id} style={styles.card}>
-            <Text style={styles.cardTitle}>{card.title}</Text>
-            <Text style={styles.cardDescription}>{card.description}</Text>
-            <TouchableOpacity onPress={toggleFavorite}>
-           <Image
-             source={isFavorite ? require('../assets/outlinekalp.png') : require('../assets/filledkalp.png')}
-             style={styles.imagemodal}
-           />
-         </TouchableOpacity>
+        {favoritedItems.map((item) => (
+          <TouchableOpacity key={item._id}>
+            <View style={styles.card} key={item._id}>
+            <Text style={styles.cardTitle}>{item.title.toUpperCase()}</Text>
+            <Text style={styles.cardDescription}>{item.description}</Text>
+            <TouchableOpacity  onPress={() => toggleFavorite(item._id)}>
+              <Image
+                source={require('../assets/filledkalp.png')}
+                style={styles.imagemodal}
+              />
+            </TouchableOpacity>
+             
+            </View>
           </TouchableOpacity>
-          
         ))}
       </View>
     </ScrollView>
@@ -77,7 +94,6 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flexGrow: 1,
-    paddingBottom: 125,
   },
   header: {
     color: '#1E1E1E',
@@ -86,10 +102,10 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   headercontainer: {
-    height: '20%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
+    marginTop:-30
   },
   logoContainer: {
     marginLeft: 'auto',
@@ -100,30 +116,31 @@ const styles = StyleSheet.create({
     height: 100,
   },
   cardContainer: {
-    marginTop: 10,
     alignItems:'center'
   },
-  card: {
+  card: { 
     borderRadius: 10,
-    padding: 16,
     marginBottom: 16,
-    width: '80%',
-    height: '32%',
+    width: 300,
+    height:250,
     backgroundColor: '#e4d9fc',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.25,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
     shadowRadius: 2.84,
+    paddingTop:70,
+    paddingBottom:70,
+    paddingLeft:40,
+    paddingRight:40,
+    marginTop:15
   },
   cardTitle: {
     fontSize: 18,
     fontFamily:'Raleway',
     marginBottom: 8,
-    marginTop:-20
+    marginTop:20
   },
   cardDescription: {
     fontSize: 12,
@@ -134,8 +151,8 @@ const styles = StyleSheet.create({
     marginLeft:'auto',
     marginRight:'auto',
     marginTop:20,
-    marginBottom:-30,
     width:40,
-    height:40
+    height:40,
+    marginBottom:20
   }
 });

@@ -241,11 +241,13 @@ export default function Takvim() {
             return (
               <View style={styles.cardContainer} key={index}>
                 <View style={[styles.card, { backgroundColor: etkinlik.selectedColor, borderBottomColor: selectedColorDark, borderBottomWidth:4 }]}>
-                  <View style={styles.leftColumn}>
-                    <Text style={styles.cardText}>{etkinlik.aciklama}</Text>
-                  </View>
-                  <View style={styles.rightColumn}>
+                  <View style={styles.leftColumn}>                    
                     <Text style={styles.cardText}>{etkinlik.baslik}</Text>
+
+                  </View>
+                  <View style={styles.rightColumn}>                    
+                    <Text style={styles.cardText}>{etkinlik.aciklama}</Text>
+
                     <Text style={styles.cardText}>{etkinlik.baslangicGunAy} {etkinlik.baslangicSaatDakika} - {etkinlik.bitisGunAy} {etkinlik.bitisSaatDakika} {etkinlik.konum}</Text>
                   </View>
                   <View style={styles.right2Column}>

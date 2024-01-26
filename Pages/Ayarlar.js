@@ -6,6 +6,7 @@ import * as Font from 'expo-font';
 import Icon, { Icons } from '../components/Icon';
 import { useNavigation } from '@react-navigation/native'; 
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const fetchFonts = async () => {
   await Font.loadAsync({
@@ -56,6 +57,12 @@ export default function Ayarlar() {
   }
   const goToGizlilikIlkesi = () =>{
     navigation.navigate('GizlilikIlkesi');
+  }
+
+
+  const cikis = async () =>{
+    await AsyncStorage.removeItem('token');
+    navigation.navigate('Login');
   }
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -124,7 +131,7 @@ export default function Ayarlar() {
           <Text style={styles.hesapbilgilerito}>Gizlilik İlkesi</Text>
           <Icon type={Icons.AntDesign} name="right" size={20} color="#381163" style={styles.icon} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.cikisbutton}>
+        <TouchableOpacity style={styles.cikisbutton} onPress={cikis}>
           <Text style={styles.cikisbuttontext}>Oturumu Kapat</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.hesapsilbutton}>
@@ -186,10 +193,10 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   headercontainer: {
-    height: '20%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
+    marginTop:-5
   },
   ayarlarcontainer: {},
   hesapbilgilericontainer: {

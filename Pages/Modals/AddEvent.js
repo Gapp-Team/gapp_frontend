@@ -21,10 +21,10 @@ const CustomModal = ({ visible, onClose, addEtkinlik }) => {
     const [selectedOption, setSelectedOption] = useState('');
 
     const optionsTekrar = [
-        { label: 'Her Hafta', value: 'Her Hafta' },
-        { label: 'Her Ay', value: 'Her Ay' },
-        { label: 'Her 2 Ayda Bir', value: 'Her 2 Ayda Bir' },
-        { label: 'Her Yıl', value: 'Her Yıl' },
+        { label: 'Her Hafta', value: 'Her Hafta'  },
+        { label: 'Her Ay', value: 'Her Ay'  },
+        { label: 'Her 2 Ayda Bir', value: 'Her 2 Ayda Bir'},
+        { label: 'Her Yıl',  value: 'Her Yıl' },
         { label: 'Hiçbir Zaman', value: 'Hiçbir Zaman' },
       ];
     const optionsHatirlatici = [
@@ -152,7 +152,7 @@ const CustomModal = ({ visible, onClose, addEtkinlik }) => {
                         <Text style={styles.itemtext}>Tekrar</Text>
                         <View style={{marginLeft:'auto', flexDirection:'row'}}> 
                             <RNPickerSelect
-                                onValueChange={handleBitisTarihSec}
+                            onValueChange={(value) => setTekrar(value)}
                                 items={optionsTekrar}
                                 value={tekrar}
                             />
@@ -192,24 +192,6 @@ const CustomModal = ({ visible, onClose, addEtkinlik }) => {
                     </View>
                     <View style={styles.itemAciklama}>
                         <Text style={styles.itemtext}>Açıklama Ekle</Text>
-                        <View style={styles.inputRow}>
-                            <TextInput
-                            style={styles.inputAciklama}
-                            multiline
-                            numberOfLines={1}
-                            onChangeText={(text) => setAciklama(text)} 
-                            value={aciklama}
-                            />
-                        </View>
-                        <View style={styles.inputRow}>
-                            <TextInput
-                            style={styles.inputAciklama}
-                            multiline
-                            numberOfLines={1}
-                            onChangeText={(text) => setAciklama(text)} 
-                            value={aciklama}
-                            />
-                        </View>
                         <View style={styles.inputRow}>
                             <TextInput
                             style={styles.inputAciklama}

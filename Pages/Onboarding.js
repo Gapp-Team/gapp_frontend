@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#381163',
-    backgroundColor: '#381163', // Arka plan rengi
+    backgroundColor: '#381163', 
   },
   textBaslik: {
     fontSize: 58,

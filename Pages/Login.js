@@ -12,21 +12,29 @@ import {
 import Logo from '../components/Logo';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { loginUser } from '../request/login';
 
 export default function Login({navigation}){
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+
+    const [user, setUser] = useState({});
 
     const handleLogin = async () => {
-      if (username === 'users@gmail.com' && password === '1234') {
-        await AsyncStorage.setItem('username', username);
-        console.log('Kullanıcı adı kaydedildi:', username);
-        navigation.navigate('Navbar');
-      } else {
-        Alert.alert('Hatalı Giriş', 'Kullanıcı adı veya şifre hatalı.');
+      console.log(user);
+      try {
+        const response = await loginUser(user);
+        console.log("responseeeeeeeeeeeeeeeee:", response);
+        if (response) {
+          await AsyncStorage.setItem('token', response.token);
+          setTimeout(() => {
+            navigation.navigate('Navbar');
+          }, 1000)
+        }
+      } catch (error) {
+        console.error('An error occurred during login:', error);
+        Alert.alert("Email ya da şifre hatalı.");
       }
     };
-
+    
   return (
     <View style = {styles.container}>
       <Logo />
@@ -37,17 +45,15 @@ export default function Login({navigation}){
         <Image source={require('../assets/username.png')} style={styles.image} />
         <TextInput
           style={styles.input}
-          onChangeText={text => setUsername(text)}
-          value={username}
-          placeholder="Kullanıcı Adı"
+          onChangeText= {(text) =>setUser({ ...user, email: text }) }
+          placeholder="E-Mail"
            placeholderTextColor="#381163" 
         />
       </View>
       <View style={styles.inputContainer}>
         <Image source={require('../assets/password.png')} style={styles.image} />
         <TextInput
-            onChangeText={text => setPassword(text)}
-            value={password}
+          onChangeText= {(text) =>setUser({ ...user, password: text }) }
             secureTextEntry={true}
             style={styles.input}
             placeholder="Şifre"

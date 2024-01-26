@@ -1,22 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, Alert, Modal, Linking, TextInput } from 'react-native';
 import Logo from '../components/Logo';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import * as Font from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Ogren from './KesfetIcerik/Ogren';
-import Bakım from './KesfetIcerik/Bakim';
-import Cinsiyet from './KesfetIcerik/Cinsiyet';
-import Guvenlik from './KesfetIcerik/Guvenlik';
-import Iliski from './KesfetIcerik/Ilıski';
-import Planla from './KesfetIcerik/Planla';
-import Destek from './KesfetIcerik/Destek';
-import Hakkında from './KesfetIcerik/Hakkinda';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import Icon, { Icons } from '../components/Icon';
 import AddEvent from './Modals/AddEvent';
+import { getAllCategories, getAllProducts, getProductsById } from '../request/main';
 
 import { useNavigation } from '@react-navigation/native';
+import { getUserByToken } from '../request/login';
 
 const fetchFonts = async () => {
   await Font.loadAsync({
@@ -25,67 +19,58 @@ const fetchFonts = async () => {
     'Raleway': require('../assets/Fonts/Raleway-Regular.ttf'),
     'SeoulHangang': require('../assets/Fonts/SeoulHangang-Medium.ttf'),
     'FuzzyBubbles': require('../assets/Fonts/FuzzyBubbles-Regular.ttf'),
+    'Raleway-Bold': require('../assets/Fonts/Raleway-ExtraBold.ttf'),
+    'Raleway-MediumItalic': require('../assets/Fonts/Raleway-MediumItalic.ttf'),
   });
 };
 
 
-export default function Anasayfa() {
+export default function Anasayfa({route}) {
   const navigation = useNavigation();
 
   useEffect(() => {
     fetchFonts();
   }, []);
 
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [modals, setModals] = useState(false);
+  const [productDetails, setProductDetails] = useState(null); 
+  const [filledHeart, setFilledHeart] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
 
-  useEffect(() => {
-    async function getUsername() {
-      try {
-        const storedUsername = await AsyncStorage.getItem('username');
-        console.log('Alınan kullanıcı adı:', storedUsername);
-        setUsername(storedUsername || '');
-      } catch (error) {
-        console.error('Kullanıcı adı alınırken hata oluştu:', error);
-      }
-    }
-  
-    getUsername();
+  useEffect( async () => {
+    const token = await AsyncStorage.getItem('token');
+    getUserByToken(token)
+    .then((response) => {
+      setUsername(response.name);
+    })
   }, []);
 
-  const labels = {
-    'Öğren': {
-      screen: Ogren,
-      imageSource: require('../assets/ogren.png'),
-    },
-    'Planla': {
-      screen: Planla,
-      imageSource: require('../assets/planla.png'),
-    },
-    'Güvenlik': {
-      screen: Guvenlik,
-      imageSource: require('../assets/guvenlik.jpg'), 
-    },
-    'Cinsiyet': {
-      screen: Cinsiyet,
-      imageSource: require('../assets/cinsiyet.png'), 
-    },
-    'Ilişki': {
-      screen: Iliski,
-      imageSource: require('../assets/iliski.png'), 
-    },
-    'Bakım': {
-      screen: Bakım,
-      imageSource: require('../assets/bakim.png'), 
-    },
-    'Destek': {
-      screen: Destek,
-      imageSource: require('../assets/destek.png'), 
-    },
-    'Hakkında': {
-      screen: Hakkında,
-      imageSource: require('../assets/iceriklogo.png'), 
+
+  useEffect(() => {
+    getAllCategories().then((res) => {
+        setCategories(res)
+    })
+
+    getAllProducts().then((res) =>(
+      setProducts(res)
+    ))
+
+    getProductsById().then((res) =>{
+      if (res.status == 404) {
+        setError("No products found for this id")
+        setProductDetails(null);
+    } else {
+      setProductDetails(res)
+        setError("");
     }
-  };
+    })
+
+  }, []);
+
+  console.log("************************************************************" ,categories);
 
   const groupIntoRows = (array, elementsPerRow) => {
     const result = [];
@@ -94,13 +79,12 @@ export default function Anasayfa() {
     }
     return result;
   };
-  const rows = groupIntoRows(Object.keys(labels), 4);
 
-  const handleLabelPress = (label) => {
+  const handleLabelPress = (id) => {
     console.log("tıklandı");
-  
-    navigation.navigate(label);
+    navigation.navigate("IcerikDetay", { id: id });
   };
+  
   
   LocaleConfig.locales['tr'] = {
     monthNames: [
@@ -139,6 +123,7 @@ export default function Anasayfa() {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [etkinlikler, setEtkinlikler] = useState([]); 
+  const [searchQuery, setSearchQuery] = useState('');
 
   const openModal = () => {
     setModalVisible(true);
@@ -148,6 +133,22 @@ export default function Anasayfa() {
     setModalVisible(false);
   };
 
+  const openCardModal = async (productId) => {
+    try {
+      const productDetails = await getProductsById(productId);
+      setProductDetails(productDetails);
+      setModals(true);
+    } catch (error) {
+      console.error('Error fetching product details:', error);
+    }
+  };
+  
+
+  const closeCardModal = () => {
+    setModals(false);
+  };
+  
+  
   const addEtkinlik = (etkinlikBilgisi) => {
     const { baslangic, bitis } = etkinlikBilgisi;
     console.log('Başlangıç Tarihi:', baslangic);
@@ -173,20 +174,72 @@ export default function Anasayfa() {
     Alert.alert("Emojiyi başarıyla seçtiniz!", selectedEmoji);
   };
 
-  const cards = [
-    {
-      id: '1',
-      title: 'GEBELİK SONLANDIRMA İŞLEMİNİN KADINLAR ÜZERİNDE ETKİSİ',
-      content: 'Gebelik kürtajı, vakum aspiratör yöntemiyle uygulanır. Bu yöntem, kürtaj için en sık uygulanan yöntemdir ve oldukça güvenlidir. Bu yöntemde plastik enjektör ve plastik ince',
-    },
-    {
-      id: '2',
-      title: 'GEBELİK SONLANDIRMA İŞLEMİNİN KADINLAR ÜZERİNDE ETKİSİ',
-      content: 'Gebelik kürtajı, vakum aspiratör yöntemiyle uygulanır. Bu yöntem, kürtaj için en sık uygulanan yöntemdir ve oldukça güvenlidir. Bu yöntemde plastik enjektör ve plastik ince',
-    },
-  ];
 
+  const handleAddToFavorites = async (_id) => {
+    try {
+      const existingFavorites = await AsyncStorage.getItem('favorites');
+      const favorites = existingFavorites ? JSON.parse(existingFavorites) : [];
+  
+      const isAlreadyInFavorites = favorites.some(
+        (fav) => fav._id === productDetails.product._id
+      );
+  
+      if (!isAlreadyInFavorites) {
+        favorites.push({
+          _id: productDetails.product._id,
+          title: productDetails.product.title,
+          author: productDetails.product.author,
+          date: productDetails.product.date,
+          description: productDetails.product.description,
+        });
+  
+        await AsyncStorage.setItem('favorites', JSON.stringify(favorites));
+  
+        console.log('Product added to favorites');
+        setFilledHeart(true);
 
+      } else {
+        setIsFavorite(false);
+        setFilledHeart(false);
+        const updatedFavorites = favorites.filter((fav) => fav._id !== productDetails.product._id);
+        await AsyncStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+  
+        console.log('Product removed from favorites');
+      }
+    } catch (error) {
+      console.error('Error adding to favorites:', error);
+    }
+  };
+
+  const renderTextWithLinks = (text) => {
+    const linkRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = text.split(linkRegex);
+
+    return parts.map((part, index) => {
+      if (linkRegex.test(part)) {
+        return (
+          <Text key={index} style={styles.linkText} onPress={() => handleLinkPress(part)}>
+            {part}
+          </Text>
+        );
+      }
+      return <Text key={index}>{part}</Text>;
+    });
+  };
+
+  const handleLinkPress = (url) => {
+    Linking.openURL(url);
+  };
+
+  const formatDateString = (dateString) => {
+    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+    const date = new Date(dateString);
+    return date.toLocaleDateString('tr-TR', options);
+  };
+
+  const handleSearch = (query) => {
+    console.log('aranan kelime:', query);
+  };
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
       <View style={styles.headercontainer}>
@@ -202,38 +255,46 @@ export default function Anasayfa() {
 
 
       <View style={styles.icerikcontainer}>
-        <View>
-          <TouchableOpacity style={styles.aramabutton}>
+        <View style={styles.aramabutton}>
+          <TouchableOpacity onPress={() => handleSearch(searchQuery)}>
             <Image source={require('../assets/search.png')} style={{marginLeft:10}} />
-            <Text  style={styles.aramabuttontext}>Arama</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> 
+          <TextInput
+              style={{marginLeft:10, float:'left'}}
+              placeholder="Arama yap"
+              value={searchQuery}
+              onChangeText={(text) => setSearchQuery(text)}
+            />          
         </View>
 
         <View style={styles.content}>
           <Text style={styles.mottotext}>GÜNLÜK MOTTO</Text>
-          <Image source={require('../assets/motto.png')} style={{marginTop:10, width:377, borderRadius:10}} />
+          <Image source={require('../assets/motto.png')} style={{marginTop:10, width:'100%', borderRadius:10}} />
         </View>
-
 
         <View style={styles.content}>
-          <Text style={styles.mottotext}>İÇERİKLER</Text>
-          {rows.map((row, rowIndex) => (
-            <View key={rowIndex} style={styles.row}>
-              {row.map((label, index) => (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => handleLabelPress(label)}
-                  style={styles.labelButton}
-                >
-                  <Image source={labels[label].imageSource} style={[styles.labelImage, label === 'Cinsiyet' && styles.specialLabelImage]} />
-                  <Text style={{color:'white', fontFamily:'SeoulHangang'}}>{label}</Text>
+        <Text style={styles.mottotext}>İÇERİKLER</Text>
 
-                </TouchableOpacity>
-              ))}
-            </View>
-          ))}
-        </View>
+        {groupIntoRows(categories, 4).map((row, rowIndex) => (
+          <View key={rowIndex} style={styles.row}>
+            {row.map((category) => (
+              <TouchableOpacity
+                key={category._id}
+                onPress={() => handleLabelPress(category._id)}
+                style={styles.labelButton}
+              >
+                <Image
+                    source={{ uri: category.imageUrl }}
+                    style={styles.labelImage}
+                  />
 
+                {/* <Image source={labels[label].imageSource} style={[styles.labelImage, label === 'Cinsiyet' && styles.specialLabelImage]} /> */}
+                <Text style={{ color: 'white', fontFamily: 'SeoulHangang', padding:5 }}>{category.name}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        ))}
+      </View>
 
         <View style={styles.content}>
           <Calendar
@@ -280,13 +341,50 @@ export default function Anasayfa() {
           <Text style={styles.mottotext}>UZMANLAR NE DİYOR</Text>
           <Text style={StyleSheet.compose(styles.mottotext, { fontSize: 20 })}>Bugün yeni ne var ?</Text>
           <ScrollView style={{ flexDirection: 'row' }} horizontal={true} showsHorizontalScrollIndicator={false}>
-          {cards.map((item) => (
-            <View style={styles.card} key={item.id}>
+          {products && products.map((item) => (
+            <TouchableOpacity  key={item._id} onPress={() => openCardModal(item._id)}>
+            <View style={styles.card} key={item._id}>
               <Text style={styles.title}>{item.title}</Text>
-              <Text style={styles.paragraph}>{item.content}</Text>
+              <Text style={styles.paragraph}>{item.description}</Text>
               <Icon type={Icons.MaterialCommunityIcons} name="arrow-right" size={25} color="#8547D1" style={styles.icon} />
             </View>
+            </TouchableOpacity>
           ))}
+
+        {modals && (
+        <Modal visible={modals} onRequestClose={closeCardModal}>
+          <ScrollView>
+          <TouchableOpacity onPress={closeCardModal} style={{ marginTop: 50, marginLeft: 20 }} >
+            <Icon type={Icons.AntDesign} name="left" size={20} color="black" style={{float: 'left'}}  />
+
+          </TouchableOpacity>
+          <View style={{ alignItems: 'center', marginTop: 40, marginBottom:50, padding:20 }}>
+            
+            <Text style={styles.videotext}>{productDetails.product.title.toUpperCase()}</Text>
+            <Text style={styles.videosubtitle}>{productDetails.product.author}</Text>
+            
+            <Text style={[styles.videosubtitle, { marginTop: 5 }]}> {formatDateString(productDetails.product.date)}</Text>
+
+            <View style={styles.videosubtitleline}></View>
+            <Text style={styles.videodescriptipn}>
+            {renderTextWithLinks(productDetails.product.description)}
+            </Text>
+            <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginTop: 20 }}>
+            <TouchableOpacity onPress={() => handleAddToFavorites(productDetails.product._id)}>
+              <Image
+                source={ filledHeart ? require('../assets/filledkalp.png') : require('../assets/outlinekalp.png')}
+                style={[styles.imagemodal, { marginRight: 150 }]}
+              />
+            </TouchableOpacity>
+              <Image
+                source={require('../assets/gönder.png')}
+                style={styles.imagemodal}
+              />
+            </View>
+          </View>
+          </ScrollView>
+        </Modal>
+      )}
         </ScrollView>
         </View>
       </View>
@@ -331,7 +429,7 @@ const styles = StyleSheet.create({
   },
   emailText:{
     fontFamily:'Raleway',
-    fontSize:18,
+    fontSize:17,
     marginTop: -160,
     color:'#636363'
   },
@@ -344,7 +442,8 @@ const styles = StyleSheet.create({
     backgroundColor:'#E9E9E9A3',
     paddingTop:10,
     paddingBottom:10,
-    borderRadius:20
+    borderRadius:20, 
+    float:'left'
   },
   aramabuttontext:{
     marginLeft:10,
@@ -358,25 +457,23 @@ const styles = StyleSheet.create({
     color:'#7A7A7A'
   },
   labelButton: {
-    width: 85,  
+    width: 86,  
     height: 85,
     backgroundColor: '#381163',
     marginTop: 7,
-    marginRight: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 10
+    borderRadius: 10,
+    marginRight:10
   },
   row: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   takvimbutton: {
     backgroundColor: '#E9E9E9',
     padding: 15,
     borderRadius: 25,
     justifyContent: 'center',
-    elevation: 3,
     width: 350,
     alignItems: 'center',
     flexDirection: 'row',
@@ -401,7 +498,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 4,
-    width: 300, 
+    width: 300,
+    height:200,
+    paddingBottom:100
   },
   title: {
     fontSize: 20,
@@ -430,4 +529,37 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  videotext: {
+    fontSize: 30,
+    textAlign: 'center',
+    marginTop: 20,
+    fontFamily:'Raleway-Bold',
+    fontWeight:'bold'
+  },
+  videosubtitle: {
+    marginTop: 16,
+    fontSize: 12,
+    textAlign: 'center',
+    fontFamily:'Raleway-MediumItalic',
+  },
+   videosubtitleline: {
+    borderWidth: 0.5,
+    backgroundColor: 'black',
+    marginLeft: 0,
+    marginBottom: 10,
+    marginTop: 10,
+    fontFamily:'Raleway',
+    borderEndWidth:'350'
+  },
+  videodescriptipn: {
+    marginTop: 16,
+    fontSize: 15,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    padding: 20,
+    fontFamily:'Raleway'
+  },
+  linkText:{
+    color:'#381163'
+  }
 });

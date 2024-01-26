@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Text,
   View,
@@ -10,9 +10,10 @@ import {
   Linking,
   Alert
 } from 'react-native';
-import axios from 'axios';
 import Logo from '../components/Logo';
 import { CheckBox } from 'react-native-elements';
+import { AddUser, deneme } from '../request/login';
+import { getAllCategories } from '../request/main';
 
 export default function Register({navigation}){
   const [isChecked, setIsChecked] = useState(false);
@@ -26,34 +27,66 @@ export default function Register({navigation}){
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [user, setUser] = useState({});
+  
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
 
-    
-      try {
-        const response = await axios.post('http://localhost:3000/create', {
-          name,
-          email,
-          password,
-        });
+    // if (user.password !== user.password2) {
+    //   setError(false);
+    // } else {
+      console.log(user);
+      setError(true);
+      AddUser(user)
+        .then((response) => {
+          console.log("responseeeeeeeeeeeeeeeee:", response);
+          console.log("46",response.data.message);
 
-        const responseData = await response.json();
-        console.log(response.status);
+          if (response.data.message = "Başarıyla kaydedildi.") {
+            setlogin("true");
+            Alert.alert("kaydedildi");
+            console.log(response.data);
+            setTimeout(() => {
+              router.push(`/userValidation/${response.data.accessToken}`);
+            }, 1000);
+          } 
+          else {              
+             Alert.alert("bu e posta adresi veya telefon zaten kullanımda");
+             console.log("bu e posta adresi veya telefon zaten kullanımda");
+          }
+        })
+        .catch(() => "");
+     
+    //}
+  };
+  
 
-        if (response.status === 200) {
-          Alert.alert('Kayıt başarılı', responseData.message);
-          setEmail('');
-          setPassword('');
-          setPassRepeat('');
-          setError('');
-        } else {
-          setError('Kayıt oluşturulurken bir hata oluştu.');
-        }
-      } catch (err) {
+  // const handleSubmit = () => {
+  //   if (!isChecked) {
+  //     Alert.alert("Bilgilerin kullanılabilmesi için Aydınlatma Metni'ni onaylamalısınız.");
+  //     return;
+  //   }
 
-        console.log('Kayıt oluşturulurken bir hata oluştu.(catch)', err);
-      }
-}
+  //   // Replace 'YOUR_MACHINE_IP' with the actual IP address of your development machine
+  //   // fetch('http://YOUR_MACHINE_IP:3000/api/users/create', {
+  //   //   method: 'POST',
+  //   //   headers: {
+  //   //     'Content-Type': 'application/json',
+  //   //   },
+  //   //   body: JSON.stringify(user),
+  //   // })
+  //   //   .then((response) => response.json())
+  //   //   .then((data) => {
+  //   //     console.log('Response:', data);
+  //   //     // Handle success, e.g., show a success message
+  //   //     setSuccess('Kayıt işlemi başarıyla tamamlandı.');
+  //   //   })
+  //   //   .catch((error) => {
+  //   //     console.error('Errorrrrr:', error);
+  //   //     // Handle error, e.g., show an error message
+  //   //     setError('Kayıt işlemi sırasında bir hata oluştu.');
+  //   //   });
+  // };
 
   return (
     <View style = {styles.container}>
@@ -65,7 +98,7 @@ export default function Register({navigation}){
         <TextInput
           style={styles.input}
           placeholder="Kullanıcı Adı"
-          onChange= {(e) => setName(e.target.value)}
+          onChangeText={(text) => setUser({ ...user, name: text })}
           placeholderTextColor="#381163"
         />
       </View>
@@ -74,7 +107,7 @@ export default function Register({navigation}){
         <TextInput
           style={styles.input}
           placeholder="E-mail"
-          onChange= {(e) => setEmail(e.target.value)}
+          onChangeText= {(text) =>setUser({ ...user, email: text }) }
           placeholderTextColor="#381163" 
         />
       </View>
@@ -84,17 +117,18 @@ export default function Register({navigation}){
           style={styles.input}
           placeholder="Şifre"
           secureTextEntry={true}
-          onChange= {(e) => setPassword(e.target.value)}
+          onChangeText= {(text) =>setUser({ ...user, password: text }) }
           placeholderTextColor="#381163" 
         />
       </View>
       <View style={styles.inputContainer}>
         <Image source={require('../assets/password.png')} style={styles.image} />
         <TextInput
+          //onChangeText= {(text) =>setUser({ ...user, password2: text }) }
           style={styles.input}
           secureTextEntry={true}
           placeholder="Şifre (Tekrar)"
-           placeholderTextColor="#381163" 
+          placeholderTextColor="#381163" 
         />
       </View>
       <View style={styles.checkboxContainer}>
@@ -113,7 +147,7 @@ export default function Register({navigation}){
         />
       </View>
       <View>
-       <TouchableOpacity style={styles.registerButton} onPress={handleSubmit}>
+       <TouchableOpacity style={styles.registerButton} onPress={() => handleSubmit() }>
           <Text style={styles.registerButtonText}>Kayıt Ol</Text>
         </TouchableOpacity>
       </View>

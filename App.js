@@ -20,14 +20,7 @@ import ilkon from './assets/ilkon.png';
 import ikincion from './assets/ikincion.png';
 import ucuncuon from './assets/ucuncuon.png';
 import KesfetComponent from './Pages/Kesfet';
-import Ogren from './Pages/KesfetIcerik/Ogren';
-import Planla from './Pages/KesfetIcerik/Planla';
-import Güvenlik from './Pages/KesfetIcerik/Guvenlik';
-import Cinsiyet from './Pages/KesfetIcerik/Cinsiyet';
-import Iliski from './Pages/KesfetIcerik/Ilıski';
-import Bakım from './Pages/KesfetIcerik/Bakim';
-import Destek from './Pages/KesfetIcerik/Destek';
-import Hakkında from './Pages/KesfetIcerik/Hakkinda';
+import IcerikDetay from './Pages/KesfetIcerik/IcerikDetay';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -84,14 +77,7 @@ const OnboardingNavigator = () => {
       <Stack.Screen name="Anasayfa" component={Anasayfa} options={{ headerShown: false }} />
       <Stack.Screen name="Takvim" component={TakvimComponent} options={{ headerShown: false }} />
       <Stack.Screen name="Kesfet" component={KesfetComponent} options={{ headerShown: false }} />
-      <Stack.Screen name="Öğren" component={Ogren} options={{ headerShown: false }} />
-      <Stack.Screen name="Planla" component={Planla} options={{ headerShown: false }} />
-      <Stack.Screen name="Güvenlik" component={Güvenlik} options={{ headerShown: false }} />
-      <Stack.Screen name="Cinsiyet" component={Cinsiyet} options={{ headerShown: false }} />
-      <Stack.Screen name="Ilişki" component={Iliski} options={{ headerShown: false }} />
-      <Stack.Screen name="Bakım" component={Bakım} options={{ headerShown: false }} />
-      <Stack.Screen name="Destek" component={Destek} options={{ headerShown: false }} />
-      <Stack.Screen name="Hakkında" component={Hakkında} options={{ headerShown: false }} />
+      <Stack.Screen name="IcerikDetay" component={IcerikDetay} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 };
